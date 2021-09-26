@@ -43,6 +43,21 @@ class ActivityListItem extends StatefulWidget {
 class _ActivityListItemState extends State<ActivityListItem> {
   @override
   Widget build(BuildContext context) {
+    // Text Controllers ========================================================
+    final exerciseNameController = TextEditingController(
+      text: widget.activity.exerciseName,
+    );
+    final weightController = TextEditingController(
+      text: widget.activity.weight.toString(),
+    );
+    final repsController = TextEditingController(
+      text: widget.activity.reps.toString(),
+    );
+    final setsController = TextEditingController(
+      text: widget.activity.sets.toString(),
+    );
+
+    // Colors ==================================================================
     final ColorScheme colorScheme = Theme.of(context).colorScheme;
     final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
     final Color eventItemColor = colorScheme.primary.withOpacity(0.15);
@@ -55,37 +70,57 @@ class _ActivityListItemState extends State<ActivityListItem> {
           Expanded(
             flex: 3,
             child: TextField(
+              controller: exerciseNameController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Exercise Name',
               ),
+              onSubmitted: (String value) {
+                widget.activity.exerciseName = value;
+                exerciseNameController.text = value;
+              },
             ),
           ),
           Expanded(
             child: TextField(
+              controller: weightController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'kg',
               ),
               keyboardType: TextInputType.number,
+              onSubmitted: (String value) {
+                widget.activity.weight = int.parse(value);
+                weightController.text = value;
+              },
             ),
           ),
           Expanded(
             child: TextField(
+              controller: repsController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Reps',
               ),
               keyboardType: TextInputType.number,
+              onSubmitted: (String value) {
+                widget.activity.reps = int.parse(value);
+                repsController.text = value;
+              },
             ),
           ),
           Expanded(
             child: TextField(
+              controller: setsController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Sets',
               ),
               keyboardType: TextInputType.number,
+              onSubmitted: (String value) {
+                widget.activity.sets = int.parse(value);
+                setsController.text = value;
+              },
             ),
           ),
           Expanded(
@@ -116,7 +151,7 @@ class _ActivityListViewState extends State<ActivityListView> {
           ActivityListItem(
             key: Key("$index"),
             index: index,
-            activity: Activity(),
+            activity: _activities[index],
           )
       ],
       onReorder: (int oldIndex, int newIndex) {
