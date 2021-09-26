@@ -15,21 +15,28 @@ class MyApp extends StatelessWidget {
         appBar: AppBar(
           title: const Text('LifeCycles'),
         ),
-        body: const ExerciseListView(),
+        body: const ActivityListView(),
       ),
     );
   }
 }
 
-class ExerciseListView extends StatefulWidget {
-  const ExerciseListView({Key? key}) : super(key: key);
-
-  @override
-  State<ExerciseListView> createState() => _ExerciseListViewState();
+class Activity {
+  String exerciseName = '';
+  int weight = 0;
+  int reps = 0;
+  int sets = 0;
 }
 
-class _ExerciseListViewState extends State<ExerciseListView> {
-  final List<int> _items = List<int>.generate(10, (int index) => index);
+class ActivityListView extends StatefulWidget {
+  const ActivityListView({Key? key}) : super(key: key);
+
+  @override
+  State<ActivityListView> createState() => _ActivityListViewState();
+}
+
+class _ActivityListViewState extends State<ActivityListView> {
+  final _activities = List<Activity>.generate(10, (int _) => Activity());
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +47,7 @@ class _ExerciseListViewState extends State<ExerciseListView> {
     return ReorderableListView(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       children: <Widget>[
-        for (int index = 0; index < _items.length; index++)
+        for (int index = 0; index < _activities.length; index++)
           Container(
             key: Key('$index'),
             color: index.isOdd ? oddItemColor : eventItemColor,
@@ -84,7 +91,7 @@ class _ExerciseListViewState extends State<ExerciseListView> {
                   ),
                 ),
                 Expanded(
-                  child: Icon(Icons.menu),
+                  child: Icon(Icons.drag_handle),
                 )
               ],
             ),
@@ -95,8 +102,8 @@ class _ExerciseListViewState extends State<ExerciseListView> {
           if (oldIndex < newIndex) {
             newIndex -= 1;
           }
-          final int item = _items.removeAt(oldIndex);
-          _items.insert(newIndex, item);
+          final Activity activity = _activities.removeAt(oldIndex);
+          _activities.insert(newIndex, activity);
         });
       },
     );
