@@ -28,6 +28,75 @@ class Activity {
   int sets = 0;
 }
 
+class ActivityListItem extends StatefulWidget {
+  final int index;
+  final Activity activity;
+
+  const ActivityListItem(
+      {required this.index, required this.activity, Key? key})
+      : super(key: key);
+
+  @override
+  State<ActivityListItem> createState() => _ActivityListItemState();
+}
+
+class _ActivityListItemState extends State<ActivityListItem> {
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
+    final Color eventItemColor = colorScheme.primary.withOpacity(0.15);
+    return Container(
+      key: Key('$widget.index'),
+      color: widget.index.isOdd ? oddItemColor : eventItemColor,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 3,
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Exercise Name',
+              ),
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'kg',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Reps',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Expanded(
+            child: TextField(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Sets',
+              ),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Expanded(
+            child: Icon(Icons.drag_handle),
+          )
+        ],
+      ),
+    );
+  }
+}
+
 class ActivityListView extends StatefulWidget {
   const ActivityListView({Key? key}) : super(key: key);
 
@@ -40,62 +109,15 @@ class _ActivityListViewState extends State<ActivityListView> {
 
   @override
   Widget build(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
-    final Color oddItemColor = colorScheme.primary.withOpacity(0.05);
-    final Color eventItemColor = colorScheme.primary.withOpacity(0.15);
-
     return ReorderableListView(
       padding: const EdgeInsets.symmetric(horizontal: 10),
       children: <Widget>[
         for (int index = 0; index < _activities.length; index++)
-          Container(
-            key: Key('$index'),
-            color: index.isOdd ? oddItemColor : eventItemColor,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Exercise Name',
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'kg',
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Reps',
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                Expanded(
-                  child: TextField(
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: 'Sets',
-                    ),
-                    keyboardType: TextInputType.number,
-                  ),
-                ),
-                Expanded(
-                  child: Icon(Icons.drag_handle),
-                )
-              ],
-            ),
-          ),
+          ActivityListItem(
+            key: Key("$index"),
+            index: index,
+            activity: Activity(),
+          )
       ],
       onReorder: (int oldIndex, int newIndex) {
         setState(() {
